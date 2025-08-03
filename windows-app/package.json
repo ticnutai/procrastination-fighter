@@ -1,0 +1,35 @@
+{
+  "name": "procrastination-fighter",
+  "version": "1.0.0",
+  "description": "אפליקציית מאבק בדחיינות",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64",
+    "build-portable": "electron-builder --win portable",
+    "pack": "electron-builder --dir"
+  },
+  "build": {
+    "appId": "com.procrastination.fighter",
+    "productName": "Procrastination Fighter",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules",
+      "!dist"
+    ],
+    "win": {
+      "target": "portable",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "portable": {
+      "artifactName": "ProcrastinationFighter-Portable.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^37.2.5",
+    "electron-builder": "^26.0.12"
+  }
+}

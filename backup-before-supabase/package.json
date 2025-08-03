@@ -1,0 +1,93 @@
+{
+  "name": "procrastination-fighter",
+  "version": "2.0.0",
+  "description": "מערכת מקיפה למאבק בדחיינות - PWA ואפליקציית דסקטופ",
+  "main": "procrastination-app.html",
+  "author": "מפתח אפליקציות פרודוקטיביות",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/procrastination-fighter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/procrastination-fighter/issues"
+  },
+  "homepage": "https://github.com/yourusername/procrastination-fighter#readme",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish=never",
+    "pack": "electron-builder --dir",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.productivity.procrastination-fighter",
+    "productName": "מאבק בדחיינות",
+    "copyright": "© 2025 אפליקציות פרודוקטיביות",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "**/*",
+      "!README.md",
+      "!build-windows-app.bat",
+      "!electron-main.js.backup"
+    ],
+    "extraResources": [
+      {
+        "from": "procrastination-app.html",
+        "to": "app/procrastination-app.html"
+      },
+      {
+        "from": "manifest.json",
+        "to": "app/manifest.json"
+      },
+      {
+        "from": "sw.js",
+        "to": "app/sw.js"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "requestedExecutionLevel": "asInvoker",
+      "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "license": "LICENSE.txt",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "מאבק בדחיינות",
+      "include": "installer.nsh"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-Portable.${ext}"
+    },
+    "compression": "maximum",
+    "removePackageScripts": true
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.4"
+  }
+}

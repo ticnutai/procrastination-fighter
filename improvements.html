@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שיפורים מוצעים - מערכת מאבק בדחיינות</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            direction: rtl;
+            padding: 20px;
+            color: white;
+        }
+        .improvement-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .priority-high { border-left: 5px solid #ff4757; }
+        .priority-medium { border-left: 5px solid #ffa726; }
+        .priority-low { border-left: 5px solid #26c6da; }
+        h1 { text-align: center; margin-bottom: 40px; }
+        h2 { color: #ffd700; margin-bottom: 15px; }
+        h3 { color: #87ceeb; margin-bottom: 10px; }
+        ul { margin: 15px 0; }
+        li { margin: 8px 0; }
+        .code-snippet {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 שיפורים מוצעים למערכת מאבק בדחיינות</h1>
+
+    <div class="improvement-card priority-high">
+        <h2>🔔 1. מערכת התראות חכמה</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>התראות פומודורו אוטומטיות</li>
+            <li>תזכורות יומיות לשימוש במערכת</li>
+            <li>התראות מותאמות אישית לפי הרגלי המשתמש</li>
+            <li>התראות "זמן להפסקה" אחרי עבודה ארוכה</li>
+        </ul>
+        <div class="code-snippet">
+// דוגמת קוד להתראות
+function scheduleReminder(title, body, delay) {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        setTimeout(() => {
+            new Notification(title, {
+                body: body,
+                icon: '/icon-192.png',
+                badge: '/badge-72.png'
+            });
+        }, delay);
+    }
+}
+        </div>
+    </div>
+
+    <div class="improvement-card priority-high">
+        <h2>📊 2. אנליטיקס ותובנות</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>גרפים של התקדמות לאורך זמן</li>
+            <li>זיהוי דפוסי דחיינות</li>
+            <li>המלצות אישיות על בסיס התנהגות</li>
+            <li>דוחות שבועיים/חודשיים</li>
+        </ul>
+    </div>
+
+    <div class="improvement-card priority-medium">
+        <h2>🎵 3. סביבת עבודה משופרת</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>רעשי רקע למיקוד (גשם, יער, קפה)</li>
+            <li>מוזיקת עבודה משולבת</li>
+            <li>מצב "אל תפריע" עם חסימת אתרים</li>
+            <li>תאורה אדפטיבית (מצב לילה/יום)</li>
+        </ul>
+    </div>
+
+    <div class="improvement-card priority-medium">
+        <h2>👥 4. תכונות חברתיות</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>שיתוף הישגים ברשתות חברתיות</li>
+            <li>אתגרים קבוצתיים</li>
+            <li>מערכת "buddy system" לאחריותיות</li>
+            <li>לוח תוצאות חברים</li>
+        </ul>
+    </div>
+
+    <div class="improvement-card priority-medium">
+        <h2>🤖 5. בינה מלאכותית אישית</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>מאמן AI אישי למאבק בדחיינות</li>
+            <li>ניתוח טקסט של יומן לזיהוי רגשות</li>
+            <li>המלצות משימות אוטומטיות</li>
+            <li>תחזיות התנהגות ומניעה</li>
+        </ul>
+    </div>
+
+    <div class="improvement-card priority-low">
+        <h2>🎯 6. גיימיפיקציה מתקדמת</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>מערכת XP ורמות מורכבת יותר</li>
+            <li>אווטאר אישי שמשתנה לפי ביצועים</li>
+            <li>חנות פרסים וירטואלית</li>
+            <li>מיני-משחקים למוטיבציה</li>
+        </ul>
+    </div>
+
+    <div class="improvement-card priority-low">
+        <h2>📱 7. שילובים חיצוניים</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>סינכרון עם יומן גוגל/אאוטלוק</li>
+            <li>חיבור לאפליקציות כושר</li>
+            <li>שילוב עם Spotify למוזיקה</li>
+            <li>ייצוא נתונים לטבלאות</li>
+        </ul>
+    </div>
+
+    <div class="improvement-card priority-high">
+        <h2>🔧 8. שיפורים טכניים</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>גיבוי נתונים לענן</li>
+            <li>מצב עבודה אופליין מלא</li>
+            <li>אופטימיזציה לביצועים</li>
+            <li>תמיכה בריבוי שפות</li>
+        </ul>
+    </div>
+
+    <div class="improvement-card priority-medium">
+        <h2>💡 9. תכונות מתקדמות</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>מצב "מיקוד עמוק" עם שלב הכנה ושלב יציאה</li>
+            <li>זיהוי זמני פרודוקטיביות אישיים</li>
+            <li>תכנון משימות אוטומטי בלוח זמנים</li>
+            <li>מערכת הערכת קושי משימות</li>
+        </ul>
+    </div>
+
+    <div class="improvement-card priority-low">
+        <h2>🎨 10. שיפורי עיצוב</h2>
+        <h3>תכונות:</h3>
+        <ul>
+            <li>ערכות נושא מותאמות אישית</li>
+            <li>אנימציות מתקדמות</li>
+            <li>תמיכה בצבעים לעיוורי צבעים</li>
+            <li>מצב נגישות משופר</li>
+        </ul>
+    </div>
+
+</body>
+</html>

@@ -23,6 +23,9 @@
     
     <!-- Supabase Manager -->
     <script src="supabase-manager.js"></script>
+    
+    <!-- Backup & Restore Manager -->
+    <script src="backup-manager.js"></script>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -246,6 +249,59 @@
             cursor: pointer;
             font-size: 14px;
             margin-right: 10px;
+        }
+
+        /* 💾 CSS למערכת גיבוי ושחזור */
+        .backup-section {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 2px dashed rgba(255,255,255,0.3);
+        }
+
+        .backup-section h4 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .backup-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .backup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .restore-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .restore-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         .info-card {
@@ -1384,9 +1440,27 @@
                     <button class="motivation-btn" onclick="testCloudConnection()">🔍 בדק חיבור ענן</button>
                     <button class="motivation-btn" onclick="syncNow()">🔄 סנכרן עכשיו</button>
                 </div>
+                
+                <!-- מערכת גיבוי ושחזור מתקדמת -->
+                <div class="backup-section">
+                    <h4>💾 גיבוי ושחזור מתקדם</h4>
+                    <div class="setting-row">
+                        <button class="backup-btn" onclick="createBackup('full')">📦 גיבוי מלא</button>
+                        <button class="backup-btn" onclick="createBackup('tasks')">📝 גיבוי משימות</button>
+                        <button class="backup-btn" onclick="createBackup('settings')">⚙️ גיבוי הגדרות</button>
+                    </div>
+                    <div class="setting-row">
+                        <button class="restore-btn" onclick="restoreBackup()">🔄 שחזור מקובץ</button>
+                        <button class="restore-btn" onclick="restoreAutoBackup()">📅 שחזור גיבוי אוטומטי</button>
+                    </div>
+                    <div class="setting-row" style="font-size: 12px; color: #666;">
+                        <span id="lastBackupInfo">📅 גיבוי אוטומטי יומי פעיל</span>
+                    </div>
+                </div>
+                
                 <div class="setting-row">
-                    <button class="motivation-btn" onclick="exportData()">📤 ייצא נתונים</button>
-                    <button class="motivation-btn" onclick="importData()">📥 ייבא נתונים</button>
+                    <button class="motivation-btn" onclick="exportData()">📤 ייצא נתונים (פשוט)</button>
+                    <button class="motivation-btn" onclick="importData()">📥 ייבא נתונים (פשוט)</button>
                 </div>
                 <div class="setting-row">
                     <button class="delete-btn" onclick="resetAllData()">🗑️ אפס את כל הנתונים</button>
@@ -1892,6 +1966,106 @@
                 saveData(); // שמירה מקומית של השינויים
                 updateProgress();
                 console.log('✅ נתונים מקומיים עודכנו מהענן');
+            }
+        }
+
+        // 💾 פונקציות גיבוי ושחזור מתקדמות
+        async function createBackup(type = 'full') {
+            try {
+                console.log(`📦 יוצר גיבוי ${type}...`);
+                updateLastBackupInfo(`🔄 יוצר גיבוי ${type}...`);
+                
+                const result = await window.backupManager.exportBackupFile(type);
+                
+                if (result.success) {
+                    updateLastBackupInfo(`✅ גיבוי ${type} נוצר: ${result.filename}`);
+                    showNotification('גיבוי נוצר', `גיבוי ${type} נשמר בהצלחה`);
+                } else {
+                    updateLastBackupInfo(`❌ שגיאה ביצירת גיבוי ${type}`);
+                    showNotification('שגיאה בגיבוי', result.error || 'לא ניתן ליצור גיבוי');
+                }
+            } catch (error) {
+                console.error('❌ שגיאה ביצירת גיבוי:', error);
+                updateLastBackupInfo(`❌ שגיאה ביצירת גיבוי`);
+                showNotification('שגיאה', 'לא ניתן ליצור גיבוי');
+            }
+        }
+
+        async function restoreBackup() {
+            try {
+                console.log('🔄 מתחיל תהליך שחזור...');
+                updateLastBackupInfo('🔄 בוחר קובץ לשחזור...');
+                
+                const result = await window.backupManager.restoreFromFile();
+                
+                if (result.success) {
+                    updateLastBackupInfo(`✅ שחזור הושלם: ${result.restored?.join(', ') || 'הכל'}`);
+                    showNotification('שחזור הושלם', result.message || 'הנתונים שוחזרו בהצלחה');
+                    
+                    // רענון הממשק
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    updateLastBackupInfo(`❌ שגיאה בשחזור`);
+                    showNotification('שגיאה בשחזור', result.error || 'לא ניתן לשחזר את הנתונים');
+                }
+            } catch (error) {
+                console.error('❌ שגיאה בשחזור:', error);
+                updateLastBackupInfo(`❌ שגיאה בשחזור`);
+                showNotification('שגיאה', 'לא ניתן לבצע שחזור');
+            }
+        }
+
+        async function restoreAutoBackup() {
+            try {
+                console.log('🔄 משחזר מגיבוי אוטומטי...');
+                updateLastBackupInfo('🔄 משחזר מגיבוי אוטומטי...');
+                
+                const result = await window.backupManager.restoreFromAutoBackup();
+                
+                if (result.success) {
+                    updateLastBackupInfo(`✅ שחזור אוטומטי הושלם`);
+                    showNotification('שחזור הושלם', 'הנתונים שוחזרו מגיבוי אוטומטי');
+                    
+                    // רענון הממשק
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    updateLastBackupInfo(`❌ אין גיבוי אוטומטי זמין`);
+                    showNotification('אין גיבוי זמין', result.error || 'לא נמצא גיבוי אוטומטי');
+                }
+            } catch (error) {
+                console.error('❌ שגיאה בשחזור אוטומטי:', error);
+                updateLastBackupInfo(`❌ שגיאה בשחזור אוטומטי`);
+                showNotification('שגיאה', 'לא ניתן לשחזר מגיבוי אוטומטי');
+            }
+        }
+
+        function updateLastBackupInfo(message) {
+            const infoElement = document.getElementById('lastBackupInfo');
+            if (infoElement) {
+                infoElement.textContent = message;
+            }
+        }
+
+        // עדכון מידע גיבוי אוטומטי בטעינת דף
+        function updateAutoBackupStatus() {
+            const lastBackup = localStorage.getItem('lastAutoBackup');
+            if (lastBackup) {
+                const backupDate = new Date(lastBackup);
+                const today = new Date();
+                const diffTime = Math.abs(today - backupDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays <= 1) {
+                    updateLastBackupInfo(`📅 גיבוי אוטומטי אחרון: היום`);
+                } else {
+                    updateLastBackupInfo(`📅 גיבוי אוטומטי אחרון: לפני ${diffDays} ימים`);
+                }
+            } else {
+                updateLastBackupInfo(`📅 גיבוי אוטומטי יומי פעיל`);
             }
         }
 
@@ -2922,6 +3096,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 🌐 אתחול ספק ענן
             initializeCloudProvider();
+            
+            // 💾 אתחול מערכת גיבוי
+            setTimeout(() => {
+                updateAutoBackupStatus();
+            }, 2000);
             
             // Prevent zoom on input focus for iOS
             const inputs = document.querySelectorAll('input, textarea');
